@@ -11,6 +11,134 @@ var powerUser = 5;
 var powerCpu = 5;
 var ifUserCrit = 0;
 var ifCpuCrit = 0;
+var possibility = ["feu","eau","plante","electrik","glace","sol","vol","poison","insect","combat","psy","roche","spectre","normal","dragon","tenebre","acier","fée"]
+var superEffective = [
+    "feu/plante",
+    "eau/feu",
+    "plante/eau",
+    "electrik/eau",
+    "glace/plante",
+    "feu/glace",
+    "sol/feu",
+    "sol/electrik",
+    "eau/sol",
+    "plante/sol",
+    "glace/sol",
+    "vol/plante",
+    "electrik/vol",
+    "glace/vol",
+    "poison/plante",
+    "sol/poison",
+    "insect/plante",
+    "feu/insect",
+    "vol/insect",
+    "combat/glace",
+    "vol/combat",
+    "psy/poison",
+    "psy/combat",
+    "insect/psy",
+    "roche/feu",
+    "roche/glace",
+    "roche/vol",
+    "roche/insect",
+    "eau/roche",
+    "plante/roche",
+    "combat/roche",
+    "sol/roche",
+    "spectre/psy",
+    "combat/normal",
+    "glace/dragon",
+    "tenebre/psy",
+    "tenebre/spectre",
+    "combat/tenebre",
+    "insect/tenebre",
+    "acier/glace",
+    "acier/roche",
+    "feu/acier",
+    "combat/acier",
+    "sol/acier",
+    "fée/combat",
+    "fée/dragon",
+    "fée/tenebre",
+    "poison/fée",
+    "acier/fée"
+];
+var bothSuperEffective = [
+    "spectre/spectre",
+    "dragon/dragon"
+]
+var bothNoEffective = [
+    "feu/feu",
+    "eau/eau",
+    "electrik/electrik",
+    "glace/glace",
+    "poison/poison",
+    "combat/insect",
+    "insect/combat",
+    "psy/psy",
+    "tenebre/tenebre",
+    "acier/acier"
+];
+var noEffective = [
+    "feu/plante",
+    "eau/feu",
+    "plante/eau",
+    "plante/electrik",
+    "feu/glace",
+    "eau/glace",
+    "plante/sol",
+    "vol/plante",
+    "electrik/vol",
+    "poison/plante",
+    "sol/poison",
+    "insect/plante",
+    "insect/sol",
+    "feu/insect",
+    "poison/insect",
+    "vol/insect",
+    "vol/combat",
+    "poison/combat",
+    "psy/combat",
+    "roche/feu",
+    "roche/poison",
+    "roche/vol",
+    "combat/roche",
+    "sol/roche",
+    "roche/normal",
+    "dragon/feu",
+    "dragon/eau",
+    "dragon/plante",
+    "dragon/electrik",
+    "tenebre/spectre",
+    "combat/tenebre",
+    "acier/normal",
+    "acier/plante",
+    "acier/glace",
+    "acier/vol",
+    "acier/psy",
+    "acier/insect",
+    "acier/roche",
+    "acier/dragon",
+    "feu/acier",
+    "eau/acier",
+    "electrik/acier",
+    "fée/combat",
+    "fée/insect",
+    "fée/tenebre",
+    "feu/fée",
+    "poison/fée",
+    "acier/fée"
+];
+var ineffective = [
+    "sol/electrik",
+    "vol/sol",
+    "spectre/combat",
+    "spectre/normal",
+    "normal/spectre",
+    "tenebre/psy",
+    "acier/poison",
+    "fée/dragon"
+];
 // Début du jeu
 play();
 confirm("Merci d'avoir jouer, Voulez vous rejouer ?");
@@ -23,105 +151,49 @@ function play() {
     while(objective === 0) {
         enterChoice();
         // Choix de l'ordinateur
-        var cpuChoice = randomChoice(6);
-        if(cpuChoice === 0) {
-            cpuChoice = "feu";
-        }
-        else if(cpuChoice === 1) {
-            cpuChoice = "eau";
-        }
-        else if(cpuChoice === 2) {
-            cpuChoice = "plante";
-        }
-        else if(cpuChoice === 3) {
-            cpuChoice = "electrik";
-        }
-        else if (cpuChoice === 4) {
-            cpuChoice = "glace";
-        }
-        else {
-            cpuChoice = "sol";
-        };
+        var cpuChoice = randomChoice();
+        cpuChoice = possibility[cpuChoice];
         alert("l'Ordinateur est de type " + cpuChoice + " !"); 
         alert("Que le match commence !");
         // Compare les résultats
         powerUser = 5;
         powerCpu = 5;
         // Offensif
-        if(
-            userChoiceMin === "feu" && cpuChoice === "plante"
-            || userChoiceMin === "eau" && cpuChoice === "feu"
-            || userChoiceMin === "plante" && cpuChoice === "eau"
-            || userChoiceMin === "electrik" && cpuChoice === "eau"
-            || userChoiceMin === "glace" && cpuChoice === "plante"
-            || userChoiceMin === "feu" && cpuChoice === "glace"
-            || userChoiceMin === "sol" && cpuChoice === "feu"
-            || userChoiceMin === "sol" && cpuChoice === "electrik"
-            || userChoiceMin === "eau" && cpuChoice === "sol"
-            || userChoiceMin === "plante" && cpuChoice === "sol"
-            || userChoiceMin === "glace" && cpuChoice === "sol") {
-                alert("C'est Super Efficace sur l'Ordinateur !");
-                powerUser++;
+        if(superEffective.includes(userChoiceMin + "/" + cpuChoice)) {
+            alert("C'est Super Efficace sur ordinateur !");
+            powerUser++;
             }
-        else if(
-            cpuChoice === "feu" && userChoiceMin === "plante"
-            || cpuChoice === "eau" && userChoiceMin === "feu"
-            || cpuChoice === "plante" && userChoiceMin === "eau"
-            || cpuChoice === "electrik" && userChoiceMin === "eau"
-            || cpuChoice === "glace" && userChoiceMin === "plante"
-            || cpuChoice === "feu" && userChoiceMin === "glace"
-            || cpuChoice === "sol" && userChoiceMin === "feu"
-            || cpuChoice === "sol" && userChoiceMin === "electrik"
-            || cpuChoice === "eau" && userChoiceMin === "sol"
-            || cpuChoice === "plante" && userChoiceMin === "sol"
-            || cpuChoice === "glace" && userChoiceMin === "sol") {
+        else if(superEffective.includes(cpuChoice + "/" + userChoiceMin)) {
                 alert("C'est Super Efficace sur " + userName + " !");
                 powerCpu++;
         }
-        else {"je sais pas bros"};
+        else if (bothSuperEffective.includes(userChoiceMin + "/" + cpuChoice)) {
+            alert("C'est Super Efficace sur ordinateur !");
+            alert("C'est Super Efficace sur " + userName + " !");
+        }
+        else {"Neutre"};
         // Defensif
-        if(
-            userChoiceMin === "feu" && cpuChoice === "feu"
-            || userChoiceMin === "eau" && cpuChoice === "eau"
-            || userChoiceMin === "plante" && cpuChoice === "plante"
-            || userChoiceMin === "electrik" && cpuChoice === "electrik"
-            || userChoiceMin === "glace" && cpuChoice === "glace") {
+        if(bothNoEffective.includes(userChoiceMin + "/" + cpuChoice)) {
                 alert("Ce n'est Pas Très Efficace sur " + userName + " !");
                 alert("Ce n'est Pas Très Efficace sur l'Ordinateur !");
             }
-        else if(
-            userChoiceMin === "feu" && cpuChoice === "plante"
-            || userChoiceMin === "eau" && cpuChoice === "feu"
-            || userChoiceMin === "plante" && cpuChoice === "eau"
-            || userChoiceMin === "plante" && cpuChoice === "electrik"
-            || userChoiceMin === "feu" && cpuChoice === "glace"
-            || userChoiceMin === "eau" && cpuChoice === "glace"
-            || userChoiceMin === "plante" && cpuChoice === "sol") {
+        else if(noEffective.includes(userChoiceMin + "/" + cpuChoice)) {
                 alert("Ce n'est Pas Très Efficace sur " + userName + " !");
                 powerUser++;
             }
-        else if(
-            cpuChoice === "feu" && userChoiceMin === "plante"
-            || cpuChoice === "eau" && userChoiceMin === "feu"
-            || cpuChoice === "plante" && userChoiceMin === "eau"
-            || cpuChoice === "plante" && userChoiceMin === "electrik"
-            || cpuChoice === "feu" && userChoiceMin === "glace"
-            || cpuChoice === "eau" && userChoiceMin === "glace"
-            || cpuChoice === "plante" && userChoiceMin === "sol") {
+        else if(noEffective.includes(cpuChoice + "/" + userChoiceMin)) {
                 alert("Ce n'est Pas Très Efficace sur l'Ordinateur !");
                 powerCpu++;
         }
-        else if(
-            userChoiceMin === "sol" && cpuChoice === "electrik") {
+        else if(ineffective.includes(userChoiceMin + "/" + cpuChoice)) {
                 alert("Ça n'a Pratiquement Aucun Effet sur " + userName + " !")
                 powerUser += 2;
             }
-        else if(
-            cpuChoice === "sol" && userChoiceMin === "electrik") {
+        else if(ineffective.includes(cpuChoice + "/" + userChoiceMin)) {
                 alert("Ça n'a Pratiquement Aucun Effet sur l'Ordinateur !")
                 powerCpu += 2;
             }
-        else {"je sais pas bros"}
+        else {"Neutre"}
         // Coups Critiques
         ifUserCrit = randomCrit(100);
         ifCpuCrit = randomCrit(100);
@@ -179,8 +251,8 @@ function play() {
 
 // Fonctions
 
-function randomChoice(numberOfChoice) {
-return Math.floor(Math.random() * numberOfChoice);
+function randomChoice() {
+return Math.floor(Math.random() * possibility.length);
 };
 
 function randomCrit(probability) {
@@ -198,7 +270,7 @@ function enterName() {
 };
 
 function enterChoice() {
-    var userChoice = prompt("Choisissez un Type : (Feu, Eau, Plante, Electrik, Glace, Sol)");
+    var userChoice = prompt("Choisissez un Type : (Feu, Eau, Plante, Electrik, Glace, Sol, Vol, Poison, Insect, Combat, Psy, Roche, Spectre, Normal, Dragon, Tenebre, Acier, Fée)");
     userChoiceMin = userChoice.toLocaleLowerCase();
     if(
         userChoiceMin === "feu"
@@ -206,7 +278,19 @@ function enterChoice() {
         || userChoiceMin === "plante"
         || userChoiceMin === "electrik"
         || userChoiceMin === "glace"
-        || userChoiceMin === "sol") {
+        || userChoiceMin === "sol"
+        || userChoiceMin === "vol"
+        || userChoiceMin === "poison"
+        || userChoiceMin === "insect"
+        || userChoiceMin === "combat"
+        || userChoiceMin === "psy"
+        || userChoiceMin === "roche"
+        || userChoiceMin === "spectre"
+        || userChoiceMin === "normal"
+        || userChoiceMin === "dragon"
+        || userChoiceMin === "tenebre"
+        || userChoiceMin === "acier"
+        || userChoiceMin === "fée") {
         alert("L'Ordinateur fait son choix...");
         }
         else {
