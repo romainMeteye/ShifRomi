@@ -1,8 +1,57 @@
+// FONCTIONS ----------------------------------------------------------------------------------------------------
+
+function randomChoice() {
+    return Math.floor(Math.random() * possibility.length);
+    };
+    
+    function randomCrit(probability) {
+        return Math.floor(Math.random() * probability);
+    };
+    
+    function enterName() {
+        userName = prompt("rentrez votre nom :");
+        if(userName.length >= 2 && userName.length <= 20) {
+             alert("Merci " + userName + " Préparez vous !");
+            }
+            else {
+                enterName();
+            }
+    };
+    
+    function enterChoice() {
+        var userChoice = prompt("Choisissez un Type : (Feu, Eau, Plante, Electrik, Glace, Sol, Vol, Poison, Insect, Combat, Psy, Roche, Spectre, Normal, Dragon, Tenebre, Acier, Fée)");
+        userChoiceMin = userChoice.toLocaleLowerCase();
+        if(
+            userChoiceMin === "feu"
+            || userChoiceMin === "eau"
+            || userChoiceMin === "plante"
+            || userChoiceMin === "electrik"
+            || userChoiceMin === "glace"
+            || userChoiceMin === "sol"
+            || userChoiceMin === "vol"
+            || userChoiceMin === "poison"
+            || userChoiceMin === "insect"
+            || userChoiceMin === "combat"
+            || userChoiceMin === "psy"
+            || userChoiceMin === "roche"
+            || userChoiceMin === "spectre"
+            || userChoiceMin === "normal"
+            || userChoiceMin === "dragon"
+            || userChoiceMin === "tenebre"
+            || userChoiceMin === "acier"
+            || userChoiceMin === "fée") {
+            alert("L'Ordinateur fait son choix...");
+            }
+            else {
+                enterChoice();
+            }
+    };
+// Début du jeu (uniquement à la première partie) ----------------------------------------------
 alert("Bonjour, vous allez jouer au jeu de romi', inspiré du Shifoumi et de Pokémon !");
-// Nom du Joueur
+// Le Joueur entre son Nom--------_-------------------------------------------------------------
 var userName = "";
 enterName();
-// Initialisation
+// Initialisation -----------------------------------------------------------------------------
 var scoreUser = 0;
 var scoreCpu = 0;
 var userChoiceMin = "";
@@ -139,26 +188,22 @@ var ineffective = [
     "acier/poison",
     "fée/dragon"
 ];
-// Début du jeu
-play();
-confirm("Merci d'avoir jouer, Voulez vous rejouer ?");
-scoreUser = 0;
-scoreCpu = 0;
+// Lancement de la partie --------------------------------------------------------------------------------
 play();
 
-
+// Fonctions principale de la partie ---------------------------------------------------------------------
 function play() {
     while(objective === 0) {
         enterChoice();
-        // Choix de l'ordinateur
+        // Choix de l'ordinateur -------------------------------------------------------------------------
         var cpuChoice = randomChoice();
         cpuChoice = possibility[cpuChoice];
         alert("l'Ordinateur est de type " + cpuChoice + " !"); 
         alert("Que le match commence !");
-        // Compare les résultats
+        // Réinitialise la puissance des deux joueurs ----------------------------------------------------
         powerUser = 5;
         powerCpu = 5;
-        // Offensif
+        // Repaire et calcule la puissance offensive (super efficace) ------------------------------------
         if(superEffective.includes(userChoiceMin + "/" + cpuChoice)) {
             alert("C'est Super Efficace sur ordinateur !");
             powerUser++;
@@ -172,7 +217,7 @@ function play() {
             alert("C'est Super Efficace sur " + userName + " !");
         }
         else {"Neutre"};
-        // Defensif
+        // Repaire et calcule la puissance deffensive (Pas très efficace) ---------------------------------
         if(bothNoEffective.includes(userChoiceMin + "/" + cpuChoice)) {
                 alert("Ce n'est Pas Très Efficace sur " + userName + " !");
                 alert("Ce n'est Pas Très Efficace sur l'Ordinateur !");
@@ -194,7 +239,7 @@ function play() {
                 powerCpu += 2;
             }
         else {"Neutre"}
-        // Coups Critiques
+        // Probabilités de coups critiques ---------------------------------------------------------------
         ifUserCrit = randomCrit(100);
         ifCpuCrit = randomCrit(100);
         if(ifUserCrit <= 10) {
@@ -222,7 +267,7 @@ function play() {
             alert("L'Ordinateur réalise un Coup Dévastateur !");
             powerCpu += 2;
         }
-        // Compare la puissance
+        // Anonce le gagnant et compte les points --------------------------------------------------------
         else {};
         if(powerUser === powerCpu) {
             alert("Equalité !")
@@ -235,7 +280,7 @@ function play() {
             alert("L'Ordinateur Gagne !");
             scoreCpu++;
         }
-        // Annonce les scores
+        // Annonce les scores -----------------------------------------------------------------------------
         alert(userName + " : " + scoreUser + "\n" + "Ordinateur" + " : " + scoreCpu);
         if(scoreUser === 3) {
             objective++;
@@ -246,54 +291,16 @@ function play() {
         else {
             alert("Nouvelle Manche !");
         }
+        // Fin de partie et confirmation de Replay --------------------------------------------------------
+        if (objective === 1) {
+            confirm("Merci d'avoir jouer, Voulez vous rejouer ?");
+            scoreUser = 0;
+            scoreCpu = 0;
+            objective = 0;
+            play();
+        }
+        else {
+            "Non"
+        };
     };
-};
-
-// Fonctions
-
-function randomChoice() {
-return Math.floor(Math.random() * possibility.length);
-};
-
-function randomCrit(probability) {
-    return Math.floor(Math.random() * probability);
-};
-
-function enterName() {
-    userName = prompt("rentrez votre nom :");
-    if(userName.length >= 2 && userName.length <= 20) {
-         alert("Merci " + userName + " Préparez vous !");
-        }
-        else {
-            enterName();
-        }
-};
-
-function enterChoice() {
-    var userChoice = prompt("Choisissez un Type : (Feu, Eau, Plante, Electrik, Glace, Sol, Vol, Poison, Insect, Combat, Psy, Roche, Spectre, Normal, Dragon, Tenebre, Acier, Fée)");
-    userChoiceMin = userChoice.toLocaleLowerCase();
-    if(
-        userChoiceMin === "feu"
-        || userChoiceMin === "eau"
-        || userChoiceMin === "plante"
-        || userChoiceMin === "electrik"
-        || userChoiceMin === "glace"
-        || userChoiceMin === "sol"
-        || userChoiceMin === "vol"
-        || userChoiceMin === "poison"
-        || userChoiceMin === "insect"
-        || userChoiceMin === "combat"
-        || userChoiceMin === "psy"
-        || userChoiceMin === "roche"
-        || userChoiceMin === "spectre"
-        || userChoiceMin === "normal"
-        || userChoiceMin === "dragon"
-        || userChoiceMin === "tenebre"
-        || userChoiceMin === "acier"
-        || userChoiceMin === "fée") {
-        alert("L'Ordinateur fait son choix...");
-        }
-        else {
-            enterChoice();
-        }
 };
